@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToDO...</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="modal">
+        <div class="taskModal">
+           <header>
+            <div><h2>New Task</h2></div>
+            </header>
+            <form action="">
+                <div class="taskForm">
+                    <div class="formField">
+                        <label for="taskName">Name</label>
+                        <input name="taskName" id="taskName" type="text" required>
+                    </div>
+                    <div class="formField">
+                        <label for="taskDate">Date</label>
+                        <input name="taskDate" id="taskDate" type="date" required>
+                    </div>
+                    <div class="formField">
+                        <label for="taskDesc">Description</label>
+                        <textarea name="taskDesc" id="taskDesc" cols="10" rows="5"></textarea>
+                    </div>
+                
+                </div>
+                <footer class="formBtns">
+                    <button class="formBtn closeTaskForm">Cancel</button>
+                    <input type="submit" class="formBtn submitTaskForm" value="Submit">
+                </footer>
+            </form>
+        </div>
+    </div>
+
+    <div class="sidebar">
+        <div class="sideTitle" style="display: flex;justify-content: space-between;margin: 0 5%;">
+            <h2>To-DO...</h2>
+        </div>
+        <div class="sidebarBtns">
+            <div class="sideBtn selected" id="home"><i class="fa-solid fa-house"></i> Home</div>
+            <div class="sideBtn" id="today"><i class="fa-regular fa-clock"></i> Today</div>
+            <div class="sideBtn" id="week"><i class="fa-solid fa-calendar-days"></i> Week</div>
+        </div>
+        <div class="projectsTab" style="margin-top: 30px;">
+            <div class="projectsTitle" style="display: flex; justify-content: space-between;">
+                <h3 style="margin-left: 3%;">My projects:</h3>
+                <h3 style="margin-right: 5%; cursor: pointer;"> <i id="newProject" class="fa-solid fa-plus"></i> <i id="toggleProjects" class="fa-solid fa-angle-down"></i></h3>
+            </div>
+            <div class="projects">
+                <div class="projectForm hidden">
+                    <input type="text" placeholder="Enter your project name" id="projectName">
+                    <div><button class="newProjectBtn submit">Add</button><button class="newProjectBtn cancel">Cancel</button></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main">
+        <div class="tasksContainer">
+            <div class="task">
+                <div class="taskInfo">
+                    <input type="checkbox" name="" id="taskDone">
+                     <div class="taskText">
+                        <div class="taskTitle">Title</div>
+                        <div class="taskDesc">txt txt txt txt txt txt txt txt txt txt txt txt txt txt txt txt txt txt </div>
+                    </div>
+                </div>
+                <div class="taskInfo">
+                <div class="taskOptions"><i class="fa-solid fa-ellipsis-vertical"></i></div>
+                <div class="taskDate">14/02/2006</div>
+            </div>
+            </div>
+        </div>
+        <div class="newTaskContainer">
+        <button class="newTask"><i style="font-size: 1.3rem;" class="fa-solid fa-circle-plus"></i> New task</button>
+    </div>
+    </div>
+    <script src="main.js"></script>
+    <script src="https://kit.fontawesome.com/eab526baf9.js" crossorigin="anonymous"></script>
+</body>

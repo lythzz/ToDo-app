@@ -1,0 +1,107 @@
+import { setStorage } from "./storage"
+
+//Projects management
+class Project {
+    constructor(name){
+        this.name = name
+        this.taskList = []
+        this.selected = false
+    }
+
+    setName(name) {
+        this.name = name
+    }
+
+    getName(){
+        return this.name
+    }
+
+    addTask(task){
+        this.taskList.push(task)
+    }
+
+    deleteTask(taskName) {
+        this.tasks = this.tasks.filter((task) => task.name !== taskName)
+    }
+}
+
+const list = (function(){
+    let list = JSON.parse(localStorage.getItem('list'))
+    if(list==null||list==undefined){
+        list = [
+            {
+                'name': 'home',
+                'taskList': [],
+                'selected': true
+            },
+            {
+                'name': 'today',
+                'taskList': [],
+                'selected': false
+            },
+            {
+                'name': 'week',
+                'taskList': [],
+                'selected': false
+            }
+        ]
+    }
+    const get = () => {return list}
+    const add = (project) => list.push(project)
+    const checkNames = (name) => {
+        for(let i = 0; i < list.length; i++){
+            if(list[i].name==name){
+                return true
+            }
+        }
+    }
+
+    const clearSelected = () => list.forEach(project => {
+        project.selected = false
+    });
+
+    const select = (i) => list[i].selected = true;
+
+    const getSelected = () => {
+        for(let i = 0; i < list.length; i++){
+            if(list[i].selected){
+                return i
+            }
+        }
+    }
+
+    const getIndex = (name) =>{ for(let i = 0; i < list.length; i++){
+            if(list[i].name==name){
+                return i
+            }
+        }
+    }
+    const remove = (index) => {
+        delete list[index]
+        for(let i = index;i<list.length ;i++){ //altera o index dos obj para não deixar buracos na array
+            list[i] = list[i+1]
+        }
+        list.pop()
+    }
+    
+    const removeTask = (name) => {
+        const index = getSelected()
+        list[index].taskList = list[index].taskList.filter((task) => task.name !== name)
+    }
+
+    return {get, add, checkNames, select, clearSelected, getIndex, getSelected, remove, removeTask}
+})();
+
+function createProject(name){
+    const proj = new Project(name)
+    list.add(proj)
+    setStorage()
+}
+
+function removeProject(name){
+    const index = list.getIndex(name)
+    list.remove(index)
+    setStorage()
+}
+
+export { list, createProject, removeProject}
