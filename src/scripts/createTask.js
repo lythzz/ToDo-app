@@ -1,7 +1,6 @@
 import { list } from "./createProject";
 import { setStorage } from "./storage";
 import { loadTasks, openTaskModal } from "./UI";
-import {format} from 'date-fns'
 
 class Task{
     constructor(name, description, dueDate='No date'){
@@ -13,9 +12,7 @@ class Task{
 }
 
 function createTask(name, date, desc){
-
-    const formatedDate = format(new Date(date.replace(/-/g, '\/')), 'dd/MM/yyyy')
-    const task = new Task(name, desc, formatedDate)
+    const task = new Task(name, desc, date)
     const index = list.getSelected()
     list.get()[index].taskList.push(task)
     setStorage()
@@ -23,11 +20,21 @@ function createTask(name, date, desc){
     
 }
 
-function editTask (name, task) {
+function editTask (task) {
+    const name = document.querySelector('#taskName')
+    const date = document.querySelector('#taskDate')
+    const desc = document.querySelector('#taskDesc')
+   
+    const reverseDate = `${task.dueDate.slice(-4)}-${task.dueDate.slice(3,5)}-${task.dueDate.slice(0,2)}`
+
+    name.value = task.name
+    date.value = reverseDate
+    desc.value = task.description
+
     openTaskModal()
-    list.editQueue.name = name
+    list.editQueue.name = task.name
     list.editQueue.task = task
-    
+
     const header = document.querySelector('.formHeader')
     header.innerText = 'Edit Task'
 
@@ -39,8 +46,8 @@ function editTask (name, task) {
     
 }
 
-function removeTask(name, task){
-    list.removeTask(name, task)
+function removeTask(task){
+    list.removeTask(task.name, task)
 
     loadTasks()
     setStorage()

@@ -47,6 +47,11 @@ const setEventListeners = () => {
 }
 
 const showProjectForm = () => {
+    const projects = document.querySelector('.projects')
+    if(projects.classList. contains('hidden')){
+        toggleProjects()
+    }
+
     const form = document.querySelector('.projectForm')
     form.classList.remove('hidden')
     document.querySelector('#projectName').focus()
@@ -133,7 +138,10 @@ const loadProjects = () => {
         div.addEventListener('click', () => selectProject(div))
         remove.addEventListener('click', function(){
             removeProject(e.name)
-            projectDOM.removeChild(document.querySelector(`#${e.name}`))
+            projectDOM.removeChild(document.getElementById(`${e.name}`))
+            const home = document.querySelector('#home')
+            selectProject(home)
+            
         })
         div.appendChild(name)
         div.appendChild(remove)
@@ -166,12 +174,17 @@ const processTaskInput = () => {
     const name = document.querySelector('#taskName').value
     const date = document.querySelector('#taskDate').value
     const desc = document.querySelector('#taskDesc').value
-
     if(name==''||date==''){
         return
     }
 
-    createTask(name, date, desc)
+    const formatedDate = format(new Date(date.replace(/-/g, '\/')), 'dd/MM/yyyy')
+    const today = format(new Date, 'dd/MM/yyyy')
+    if(formatedDate<today){
+        return
+    }
+
+    createTask(name, formatedDate, desc)
     closeTaskModal()
 }
 
@@ -179,11 +192,16 @@ const processEditInput = () => {
     const newName = document.querySelector('#taskName').value
     const newDate = document.querySelector('#taskDate').value
     const newDesc = document.querySelector('#taskDesc').value
-    const formatedDate = format(new Date(newDate.replace(/-/g, '\/')), 'dd/MM/yyyy')
-
     if(newName==''||newDate==''){
-        
+        return
     }
+
+    const formatedDate = format(new Date(newDate.replace(/-/g, '\/')), 'dd/MM/yyyy')
+    const today = format(new Date, 'dd/MM/yyyy')
+    if(formatedDate<today){
+        return
+    }
+
     const name = list.editQueue['name']
     const task = list.editQueue['task']
 
@@ -250,8 +268,8 @@ const loadTasks =  () => {
     taskDelete.innerHTML = '<i class="fa-solid fa-trash"></i>'
     taskEdit.innerHTML = '<i class="fa-regular fa-pen-to-square"></i>'
 
-    taskDelete.addEventListener('click', () => removeTask(task.name, task))
-    taskEdit.addEventListener('click', () => editTask(task.name, task))
+    taskDelete.addEventListener('click', () => removeTask(task))
+    taskEdit.addEventListener('click', () => editTask(task))
     //check.addEventListener('click', () => toggleTaskStatus(task))
 
     taskInfo.appendChild(check)

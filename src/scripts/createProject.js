@@ -82,6 +82,7 @@ const list = (function(){
             list[i] = list[i+1]
         }
         list.pop()
+        
     }
 
     const editQueue = {}
@@ -99,12 +100,12 @@ const list = (function(){
             }
         });
     }
-    const removeTask = (name, task) => {
+    const removeTask = (task) => {
         let index = getSelected()
         if(index==getIndex('today')||index==getIndex('week')){
             index = getIndex(task.origin)
         }
-        list[index].taskList = list[index].taskList.filter((task) => task.name !== name)
+        list[index].taskList = list[index].taskList.filter((listTask) => listTask.name !== task.name)
     }
 
     return {get, add, checkNames, select, clearSelected, getIndex, getSelected, remove, removeTask, editTask, editQueue}
