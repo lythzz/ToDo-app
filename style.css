@@ -16,8 +16,6 @@ body{
 
 /* Sidebar */
 .sidebar{
-    position: relative;
-    left: 0;
     width: max(350px, 20%);
     background-color: rgba(252, 247, 238, 0.829);
     display: flex;
@@ -134,7 +132,7 @@ body{
     font-size: 1rem;
     border-radius: 3px;
 }
-.submitTaskForm{
+.submitTaskForm,.editTaskForm{
     background-color: rgb(92, 196, 92);
 }
 .submitTaskForm:hover{
@@ -199,7 +197,7 @@ body{
 }
 .task:hover{
     background-color: #ecffff;
-    transform: translateY(-5%);
+   
 }
 .taskInfo{
     display: flex;
@@ -216,6 +214,7 @@ body{
 .taskOptions{
     font-size: 1.2rem;
     cursor: pointer;
+    margin: 0 10px;
 }
 .taskTitle{
     font: bold 1.3rem Montserrat;
