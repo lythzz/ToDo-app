@@ -17,7 +17,9 @@ body{
 /* Sidebar */
 .sidebar{
     width: max(350px, 20%);
-    background-color: rgba(252, 247, 238, 0.829);
+    height: 100%;
+    overflow: hidden;
+    background-color: #eeee;
     display: flex;
     flex-direction: column;
 }
@@ -35,11 +37,15 @@ body{
     border: none;
 }
 .sideBtn:hover{
-    background-color: #ecffff;
+    background-color: #fff8918a;
 }
 
 .selected{
-    background-color: #90d8d8 !important;
+    background-color: #ffda61 !important;
+}
+.projects{
+    max-height: 60vh;
+    overflow-y: auto;
 }
 /*Project form*/
 .projectForm{
@@ -113,8 +119,8 @@ body{
 }
 .taskForm input,textarea{
     font: normal 1rem Montserrat;
-    border-radius: 10px;
-    padding: 1%;
+    border-radius: 5px;
+    padding: 2%;
     resize: none;   
 }
 .taskForm label{
@@ -160,10 +166,9 @@ body{
     display: flex;
     flex-direction: column;
     align-items: center;
-    background-color:rgba(252, 247, 238, 0.829);
+    background-color:#eeee;
     width: 90%;
-    height: 80%;
-    max-height: 80%;
+    height: 85%;
     margin: 2%;
     border-radius: 20px;
     overflow-y: auto;  
