@@ -19,16 +19,16 @@
             <form action="">
                 <div class="taskForm">
                     <div class="formField">
-                        <label for="taskName">Name</label>
-                        <input name="taskName" id="taskName" type="text" required>
+                        <label for="taskName">Name*</label>
+                        <input name="taskName" id="taskName" type="text" placeholder="Enter the task name here" required>
                     </div>
                     <div class="formField">
-                        <label for="taskDate">Date</label>
+                        <label for="taskDate">Date*</label>
                         <input name="taskDate" id="taskDate" type="date" required>
                     </div>
                     <div class="formField">
                         <label for="taskDesc">Description</label>
-                        <textarea name="taskDesc" id="taskDesc" cols="10" rows="5"></textarea>
+                        <textarea name="taskDesc" placeholder="Enter the task description here" id="taskDesc" cols="10" rows="5"></textarea>
                     </div>
                 
                 </div>
@@ -43,7 +43,7 @@
 
     <div class="sidebar">
         <div class="sideTitle" style="display: flex;justify-content: space-between;margin: 0 5%;">
-            <h2>To-DO...</h2>
+            <h2 style="display: flex; align-items: center;"><img style="width: 10%; margin-right: 5%;" src="../src/img/favIcon.png" alt="">  To-DO...</h2>
         </div>
         <div class="sidebarBtns">
             <div class="sideBtn selected" id="home"><i class="fa-solid fa-house"></i> Home</div>
