@@ -11,7 +11,9 @@ list.get().forEach(project => {
     if(project.name!='today'&&project.name!='week'){
         project.taskList.forEach(task => {
             if(task.dueDate==today){
-                todayTasks.push(task)
+                const tempTask = task
+                tempTask['origin'] = project.name
+                todayTasks.push(tempTask)
             
         }
     }
@@ -30,7 +32,9 @@ const getWeekTasks = () => {
         if(project.name!='today'&&project.name!='week'){
             project.taskList.forEach(task => {
                 if(task.dueDate>=today&&task.dueDate<=week){
-                    weekTasks.push(task)
+                    const tempTask = task
+                    tempTask['origin'] = project.name
+                    weekTasks.push(tempTask)
                 }
             }   
     )}})}

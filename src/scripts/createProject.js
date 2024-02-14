@@ -83,13 +83,31 @@ const list = (function(){
         }
         list.pop()
     }
-    
-    const removeTask = (name) => {
-        const index = getSelected()
+
+    const editQueue = {}
+
+    const editTask = (name, oldTask, newTask) => {
+        let index = getSelected()
+        if(index==getIndex('today')||index==getIndex('week')){
+            index = getIndex(oldTask.origin)
+        }
+        list[index].taskList.forEach(task => {
+            if(task.name = name){
+                const i = list[index].taskList.indexOf(task)
+                list[index].taskList[i] = newTask
+                console.log(list[index])
+            }
+        });
+    }
+    const removeTask = (name, task) => {
+        let index = getSelected()
+        if(index==getIndex('today')||index==getIndex('week')){
+            index = getIndex(task.origin)
+        }
         list[index].taskList = list[index].taskList.filter((task) => task.name !== name)
     }
 
-    return {get, add, checkNames, select, clearSelected, getIndex, getSelected, remove, removeTask}
+    return {get, add, checkNames, select, clearSelected, getIndex, getSelected, remove, removeTask, editTask, editQueue}
 })();
 
 function createProject(name){

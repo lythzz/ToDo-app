@@ -1,6 +1,6 @@
 import { list } from "./createProject";
 import { setStorage } from "./storage";
-import { loadTasks } from "./UI";
+import { loadTasks, openTaskModal } from "./UI";
 import {format} from 'date-fns'
 
 class Task{
@@ -23,11 +23,27 @@ function createTask(name, date, desc){
     
 }
 
-function removeTask(name){
-    list.removeTask(name)
+function editTask (name, task) {
+    openTaskModal()
+    list.editQueue.name = name
+    list.editQueue.task = task
+    
+    const header = document.querySelector('.formHeader')
+    header.innerText = 'Edit Task'
+
+    const submitTask = document.querySelector('.submitTaskForm')
+    submitTask.classList.add('hidden')
+
+    const editTask = document.querySelector('.editTaskForm')
+    editTask.classList.remove('hidden')
+    
+}
+
+function removeTask(name, task){
+    list.removeTask(name, task)
 
     loadTasks()
     setStorage()
 }
 
-export {createTask, removeTask}
+export {createTask, removeTask, editTask, Task}

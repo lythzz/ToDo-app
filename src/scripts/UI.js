@@ -1,7 +1,8 @@
 import {createProject, removeProject, list } from "./createProject";
-import { createTask, removeTask} from "./createTask";
+import {Task, createTask, editTask, removeTask} from "./createTask";
 import { getTodayTasks, getWeekTasks } from "./dateFilter";
 import { setStorage } from "./storage";
+import {format} from 'date-fns'
 
 
 const setEventListeners = () => {
@@ -21,6 +22,12 @@ const setEventListeners = () => {
     submitTask.addEventListener('click', function(event){
         event.preventDefault()
         processTaskInput()
+    })
+
+    const editTaskBtn = document.querySelector('.editTaskForm')
+    editTaskBtn.addEventListener('click', function(event){
+        event.preventDefault()
+        processEditInput()
     })
 
     const cancelTask = document.querySelector('.closeTaskForm')
@@ -168,6 +175,36 @@ const processTaskInput = () => {
     closeTaskModal()
 }
 
+const processEditInput = () => {
+    const newName = document.querySelector('#taskName').value
+    const newDate = document.querySelector('#taskDate').value
+    const newDesc = document.querySelector('#taskDesc').value
+    const formatedDate = format(new Date(newDate.replace(/-/g, '\/')), 'dd/MM/yyyy')
+
+    if(newName==''||newDate==''){
+        
+    }
+    const name = list.editQueue['name']
+    const task = list.editQueue['task']
+
+    const newTask =  new Task(newName, newDesc, formatedDate)
+    list.editTask(name, task, newTask)
+
+
+    closeTaskModal()
+    loadTasks()
+
+    const header = document.querySelector('.formHeader')
+    header.innerText = 'New Task'
+
+    const submitTask = document.querySelector('.submitTaskForm')
+    submitTask.classList.remove('hidden')
+
+    const editTask = document.querySelector('.editTaskForm')
+    editTask.classList.add('hidden')
+
+}
+
 const loadTasks =  () => {
     getTodayTasks()
     getWeekTasks()
@@ -189,8 +226,9 @@ const loadTasks =  () => {
     const taskDesc = document.createElement('div')
 
     const taskInfo2 = document.createElement('div')
-    const taskOptions = document.createElement('div')
+    const taskDelete = document.createElement('div')
     const taskDate = document.createElement('div')
+    const taskEdit = document.createElement('div')
 
     taskContainer.classList.add('task')
 
@@ -202,15 +240,19 @@ const loadTasks =  () => {
     taskTitle.classList.add('taskTitle')
     taskDesc.classList.add('taskDesc')
 
-    taskOptions.classList.add('taskOptions')
+    taskDelete.classList.add('taskOptions')
     taskDate.classList.add('taskDate')
+    taskEdit.classList.add('taskOptions')
 
     taskTitle.innerText = task.name
     taskDesc.innerText = task.description
     taskDate.innerText = task.dueDate
-    taskOptions.innerHTML = '<i class="fa-solid fa-trash"></i>'
+    taskDelete.innerHTML = '<i class="fa-solid fa-trash"></i>'
+    taskEdit.innerHTML = '<i class="fa-regular fa-pen-to-square"></i>'
 
-    taskOptions.addEventListener('click', () => removeTask(task.name))    
+    taskDelete.addEventListener('click', () => removeTask(task.name, task))
+    taskEdit.addEventListener('click', () => editTask(task.name, task))
+    //check.addEventListener('click', () => toggleTaskStatus(task))
 
     taskInfo.appendChild(check)
     taskText.appendChild(taskTitle)
@@ -218,7 +260,8 @@ const loadTasks =  () => {
     taskInfo.appendChild(taskText)
     
     taskInfo2.appendChild(taskDate)
-    taskInfo2.appendChild(taskOptions)
+    taskInfo2.appendChild(taskDelete)
+    taskInfo2.appendChild(taskEdit)
     
 
     taskContainer.appendChild(taskInfo)
@@ -228,4 +271,4 @@ const loadTasks =  () => {
     });
 }
 
-export{setEventListeners, loadTasks, loadProjects}    
+export{setEventListeners, loadTasks, loadProjects, processEditInput, openTaskModal}    
