@@ -93,7 +93,7 @@ body{
     color: var(--font-color);
 }
 .pContainer:hover{
-    background-color: #ecffff;
+    background-color:  #fff8918a;
 }
 .pName:before{
     content: '# ';
@@ -104,6 +104,7 @@ body{
 .modal{
     display: none;
     position: absolute;
+    z-index: 1;
     height: 100%;
     width: 100%;
     background-color: rgba(0,0,0,0.6);
@@ -201,7 +202,7 @@ body{
     
 }
 .task:hover{
-    background-color: #ecffff;
+    background-color:  #fff8918a;
    
 }
 .taskInfo{
@@ -223,4 +224,8 @@ body{
 }
 .taskTitle{
     font: bold 1.3rem Montserrat;
+}
+.done{
+    text-decoration: line-through;
+    color: #757575c7;
 }
