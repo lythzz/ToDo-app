@@ -227,5 +227,5 @@ body{
 }
 .done{
     text-decoration: line-through;
-    color: #757575c7;
+    color: #757575c7 !important; 
 }
