@@ -181,7 +181,7 @@ const selectProject = (div) => {
     div.classList.add('selected')
 }
 
-//Task UI
+//Task UI managment
 const processTaskInput = () => {
     const name = document.querySelector('#taskName')
     const date = document.querySelector('#taskDate')
@@ -196,15 +196,13 @@ const processTaskInput = () => {
         alert("The due date can't be blank!")
         return
     }
-    
+
     const formatedDate = format(new Date(date.value.replace(/-/g, '\/')), 'dd/MM/yyyy')
     const today = format(new Date, 'dd/MM/yyyy')
     if(compareAsc(new Date(formatedDate), new Date(today))==1){
         alert("You cannot set the due date to a past day")
         return
     }
-
-
 
     createTask(name.value, formatedDate, desc)
     closeTaskModal()
@@ -296,10 +294,11 @@ const loadTasks =  () => {
             taskText.classList.remove('done')
             taskDate.classList.remove('done')
         } else {
-            task.done = true
             taskText.classList.add('done')
             taskDate.classList.add('done')
+            task.done = true
         }
+
         setStorage()
     })
 
