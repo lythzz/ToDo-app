@@ -108,7 +108,16 @@ const list = (function(){
         list[index].taskList = list[index].taskList.filter((listTask) => listTask.name !== task.name)
     }
 
-    return {get, add, checkNames, select, clearSelected, getIndex, getSelected, remove, removeTask, editTask, editQueue}
+    const checkTaskName = (name) => {
+        const i = getSelected()
+        for (let index = 0; index < list[i].taskList.length; index++) {
+            if(list[i].taskList[index].name==name){
+                return true
+            }
+        }
+    }
+
+    return {get, add, checkNames, select, clearSelected, getIndex, getSelected, remove, checkTaskName, removeTask, editTask, editQueue}
 })();
 
 function createProject(name){

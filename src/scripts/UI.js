@@ -2,10 +2,11 @@ import {createProject, removeProject, list } from "./createProject";
 import {Task, createTask, editTask, removeTask} from "./createTask";
 import { getTodayTasks, getWeekTasks } from "./dateFilter";
 import { setStorage } from "./storage";
-import {format} from 'date-fns'
+import {format, compareAsc} from 'date-fns'
 
 
 const setEventListeners = () => {
+    //Project event listeners
     const newProjectBtn = document.querySelector('#newProject')
     newProjectBtn.addEventListener('click', showProjectForm)
 
@@ -18,6 +19,8 @@ const setEventListeners = () => {
     const toggleBtn = document.querySelector('#toggleProjects')
     toggleBtn.addEventListener('click', toggleProjects)
 
+
+    //Task event listeners
     const submitTask = document.querySelector('.submitTaskForm')
     submitTask.addEventListener('click', function(event){
         event.preventDefault()
@@ -36,6 +39,7 @@ const setEventListeners = () => {
     const newTaskBtn = document.querySelector('.newTask')
     newTaskBtn.addEventListener('click', openTaskModal)
 
+    //Sidebar buttons
     const homeBtn = document.querySelector('#home')
     homeBtn.addEventListener('click', () => {selectProject(homeBtn); setStorage(); })
 
@@ -43,7 +47,7 @@ const setEventListeners = () => {
     weekBtn.addEventListener('click', () => {selectProject(weekBtn); setStorage(); })
 
     const todayBtn = document.querySelector('#today')
-    todayBtn.addEventListener('click', () => {selectProject(todayBtn); setStorage(); })
+    todayBtn.addEventListener('click', () => {selectProject(todayBtn); setStorage(); }) 
 }
 
 const showProjectForm = () => {
@@ -95,7 +99,16 @@ const closeTaskModal = () => {
     date.value = ''
 
     const desc = document.querySelector('#taskDesc')
-    desc.value = ''   
+    desc.value = ''
+    
+    const header = document.querySelector('.formHeader')
+    header.innerText = 'New Task'
+
+    const submitTask = document.querySelector('.submitTaskForm')
+    submitTask.classList.remove('hidden')
+
+    const editTask = document.querySelector('.editTaskForm')
+    editTask.classList.add('hidden')
 }
 
 //Projects UI relative
@@ -162,7 +175,6 @@ const selectProject = (div) => {
     list.select(index)
     loadTasks()
 
-
     const prevSelected = document.querySelector('.selected')
     if(prevSelected!==null){
     prevSelected.classList.remove('selected')}
@@ -171,56 +183,63 @@ const selectProject = (div) => {
 
 //Task UI
 const processTaskInput = () => {
-    const name = document.querySelector('#taskName').value
-    const date = document.querySelector('#taskDate').value
+    const name = document.querySelector('#taskName')
+    const date = document.querySelector('#taskDate')
     const desc = document.querySelector('#taskDesc').value
-    if(name==''||date==''){
+    if(name.value==''){
+        alert("The task name can't be blank!")
+        return
+    } else if(list.checkTaskName(name.value)){
+        alert(`There's already a task with that name!`)
+        return
+    } else if(date.value == ""){
+        alert("The due date can't be blank!")
         return
     }
-
-    const formatedDate = format(new Date(date.replace(/-/g, '\/')), 'dd/MM/yyyy')
+    
+    const formatedDate = format(new Date(date.value.replace(/-/g, '\/')), 'dd/MM/yyyy')
     const today = format(new Date, 'dd/MM/yyyy')
-    if(formatedDate<today){
+    if(compareAsc(new Date(formatedDate), new Date(today))==1){
+        alert("You cannot set the due date to a past day")
         return
     }
 
-    createTask(name, formatedDate, desc)
+
+
+    createTask(name.value, formatedDate, desc)
     closeTaskModal()
 }
 
 const processEditInput = () => {
-    const newName = document.querySelector('#taskName').value
-    const newDate = document.querySelector('#taskDate').value
-    const newDesc = document.querySelector('#taskDesc').value
-    if(newName==''||newDate==''){
-        return
-    }
-
-    const formatedDate = format(new Date(newDate.replace(/-/g, '\/')), 'dd/MM/yyyy')
-    const today = format(new Date, 'dd/MM/yyyy')
-    if(formatedDate<today){
-        return
-    }
-
     const name = list.editQueue['name']
     const task = list.editQueue['task']
 
-    const newTask =  new Task(newName, newDesc, formatedDate)
-    list.editTask(name, task, newTask)
+    const newName = document.querySelector('#taskName')
+    const newDate = document.querySelector('#taskDate')
+    const newDesc = document.querySelector('#taskDesc').value
+    if(newName.value==''){
+        alert("The task name can't be blank!")
+        return
+    } else if(list.checkTaskName(newName.value)){
+        alert(`There's already a task with that name!`)
+        return
+    } else if(newDate.value == ""){
+        alert("The due date can't be blank!")
+        return
+    }
 
+    const formatedDate = format(new Date(newDate.value.replace(/-/g, '\/')), 'dd/MM/yyyy')
+    const today = format(new Date, 'dd/MM/yyyy')
+    if(compareAsc(new Date(formatedDate), new Date(today))==1){
+        alert("You cannot set the due date to a past day")
+        return
+    }
+   
+    const newTask =  new Task(newName.value, newDesc, formatedDate)
+    list.editTask(name, task, newTask)
 
     closeTaskModal()
     loadTasks()
-
-    const header = document.querySelector('.formHeader')
-    header.innerText = 'New Task'
-
-    const submitTask = document.querySelector('.submitTaskForm')
-    submitTask.classList.remove('hidden')
-
-    const editTask = document.querySelector('.editTaskForm')
-    editTask.classList.add('hidden')
-
 }
 
 const loadTasks =  () => {
@@ -261,7 +280,8 @@ const loadTasks =  () => {
     taskDelete.classList.add('taskOptions')
     taskDate.classList.add('taskDate')
     taskEdit.classList.add('taskOptions')
-
+    
+    check.checked = task.done
     taskTitle.innerText = task.name
     taskDesc.innerText = task.description
     taskDate.innerText = task.dueDate
@@ -270,7 +290,23 @@ const loadTasks =  () => {
 
     taskDelete.addEventListener('click', () => removeTask(task))
     taskEdit.addEventListener('click', () => editTask(task))
-    //check.addEventListener('click', () => toggleTaskStatus(task))
+    check.addEventListener('click', () => {
+        if(task.done){
+            task.done = false
+            taskText.classList.remove('done')
+            taskDate.classList.remove('done')
+        } else {
+            task.done = true
+            taskText.classList.add('done')
+            taskDate.classList.add('done')
+        }
+        setStorage()
+    })
+
+    if(task.done){
+        taskText.classList.add('done')
+        taskDate.classList.add('done')
+    }
 
     taskInfo.appendChild(check)
     taskText.appendChild(taskTitle)
@@ -280,7 +316,6 @@ const loadTasks =  () => {
     taskInfo2.appendChild(taskDate)
     taskInfo2.appendChild(taskDelete)
     taskInfo2.appendChild(taskEdit)
-    
 
     taskContainer.appendChild(taskInfo)
     taskContainer.appendChild(taskInfo2)

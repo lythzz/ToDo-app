@@ -17,7 +17,6 @@ function createTask(name, date, desc){
     list.get()[index].taskList.push(task)
     setStorage()
     loadTasks()
-    
 }
 
 function editTask (task) {
@@ -47,7 +46,7 @@ function editTask (task) {
 }
 
 function removeTask(task){
-    list.removeTask(task.name, task)
+    list.removeTask(task)
 
     loadTasks()
     setStorage()
